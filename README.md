@@ -1,2 +1,2 @@
 # Java-project
-个人所做的Java项目合集
+Java外卖项目源码，包含前端及后端
