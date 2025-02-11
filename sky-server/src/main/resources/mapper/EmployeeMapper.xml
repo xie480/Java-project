@@ -2,4 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.EmployeeMapper">
+    <select id="findAllByPage" resultType="com.sky.entity.Employee">
+        select id, name, username, password, phone, sex, id_number as idNumber, status, create_time as createTime,
+        update_time as updateTime, create_user as createUser, update_user as updateUser from employee
+        <where>
+            <if test="username != null and username != ''">
+                and username like concat('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+    <select id="saveEmp">
+        insert into employee (username, name, password, phone, sex, id_number, status, create_time, update_time,
+                              create_user, update_user)
+        values (#{username}, #{name}, #{password}, #{phone}, #{sex}, #{idNumber}, #{status}, #{createTime},
+                #{updateTime}, #{createUser}, #{updateUser})
+    </select>
 </mapper>
