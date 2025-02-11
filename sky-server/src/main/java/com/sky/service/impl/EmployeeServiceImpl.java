@@ -9,9 +9,11 @@ import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.PasswordEditFailedException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
@@ -67,11 +69,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public PageResult<Employee> findAllByPage(EmployeePageQueryDTO employeePageQueryDTO) {
+    public PageResult findAllByPage(EmployeePageQueryDTO employeePageQueryDTO) {
         PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
         List<Employee> employeeList = employeeMapper.findAllByPage(employeePageQueryDTO);
         Page<Employee> p = (Page<Employee>) employeeList;
-        return new PageResult<>(p.getTotal(), p.getResult());
+        return new PageResult(p.getTotal(), p.getResult());
     }
 
     @Override
@@ -88,6 +90,46 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setUpdateUser(empId);
 
         employeeMapper.saveEmp(employee);
+    }
+
+    @Override
+    public void updateStatus(Integer status, Long id) {
+        Employee employee = Employee.builder()
+                .id(id)
+                .status(status)
+                .build();
+        employeeMapper.updateEmp(employee);
+    }
+
+    @Override
+    public void updateEmp(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.updateEmp(employee);
+    }
+
+    @Override
+    public Employee findById(Long id) {
+        return employeeMapper.findById(id);
+    }
+
+    @Override
+    public void updatePassword(PasswordEditDTO passwordEditDTO) {
+        passwordEditDTO.setEmpId(BaseContext.getCurrentId());
+        String oldPassword = employeeMapper.findById(passwordEditDTO.getEmpId()).getPassword();
+        if (!DigestUtils.md5DigestAsHex(passwordEditDTO.getOldPassword().getBytes()).equals(oldPassword)) {
+            throw new PasswordEditFailedException(MessageConstant.PASSWORD_EDIT_FAILED);
+        } else if (passwordEditDTO.getNewPassword().equals(passwordEditDTO.getOldPassword())) {
+            throw new PasswordEditFailedException(MessageConstant.PASSWORD_SAME);
+        } else {
+            Employee employee = Employee.builder()
+                    .id(passwordEditDTO.getEmpId())
+                    .password(DigestUtils.md5DigestAsHex(passwordEditDTO.getNewPassword().getBytes()))
+                    .build();
+            employeeMapper.updateEmp(employee);
+        }
     }
 
 }
