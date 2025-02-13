@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.CategoryMapper">
+    <insert id="saveCategory">
+        insert into category (name, type, sort, status, create_time, update_time, create_user, update_user)
+        values (#{name}, #{type}, #{sort}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
+    <update id="updateCategory">
+        update category
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="findAllByPage" resultType="com.sky.entity.Category">
+        select id, name, type, sort, status, create_time as createTime, update_time as updateTime, create_user as
+        createUser, update_user as updateUser from category
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+        </where>
+        order by sort asc,create_time desc
+    </select>
+    <select id="findByType" resultType="com.sky.entity.Category">
+        select * from category
+        where status = 1
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        order by sort asc,create_time desc
+    </select>
+</mapper>

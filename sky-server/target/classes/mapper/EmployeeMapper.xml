@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.EmployeeMapper">
+    <update id="updateEmp">
+        update employee
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="idNumber != null">
+                id_number = #{idNumber},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="findAllByPage" resultType="com.sky.entity.Employee">
+        select id, name, username, password, phone, sex, id_number as idNumber, status, create_time as createTime,
+        update_time as updateTime, create_user as createUser, update_user as updateUser from employee
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="saveEmp">
+        insert into employee (username, name, password, phone, sex, id_number, status, create_time, update_time,
+                              create_user, update_user)
+        values (#{username}, #{name}, #{password}, #{phone}, #{sex}, #{idNumber}, #{status}, #{createTime},
+                #{updateTime}, #{createUser}, #{updateUser})
+    </select>
+</mapper>
