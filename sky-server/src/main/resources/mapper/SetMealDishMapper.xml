@@ -11,4 +11,17 @@
             #{id}
         </foreach>
     </select>
+    <select id="findByDishId" resultType="com.sky.entity.SetmealDish">
+        select *
+        from setmeal_dish
+        where setmeal_id = #{id}
+    </select>
+
+    <insert id="saveSetMealDish">
+        insert into setmeal_dish (setmeal_id, dish_id, name, price, copies)
+        values
+        <foreach collection="setMealDishes" item="sd" separator=",">
+            (#{sd.setmealId},#{sd.dishId},#{sd.name},#{sd.price},#{sd.copies})
+        </foreach>
+    </insert>
 </mapper>
