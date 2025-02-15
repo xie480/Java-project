@@ -9,6 +9,7 @@ import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class SetMealController {
     }
 
     @PutMapping
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true)
     public Result updateSetMeal(@RequestBody SetmealDTO setmealDTO) {
         log.info("修改套餐{}", setmealDTO);
         setMealService.updateSetMeal(setmealDTO);
@@ -49,6 +51,7 @@ public class SetMealController {
     }
 
     @PostMapping("/status/{status}")
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true)
     public Result updateStatus(@PathVariable Integer status, Long id) {
         log.info("修改套餐状态{}", status);
         setMealService.updateStatus(status, id);

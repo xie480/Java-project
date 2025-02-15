@@ -8,6 +8,7 @@ import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,19 +55,19 @@ public class DishController {
     }
 
     @PutMapping
+    @CacheEvict(cacheNames = "dishCache",allEntries = true)
     public Result updateDish(@RequestBody DishDTO dishDTO) {
         log.info("修改菜品");
         dishService.updateDish(dishDTO);
-        cleanCache("dish_*");
         return Result.success();
     }
 
     @PostMapping("/status/{status}")
+    @CacheEvict(cacheNames = "dishCache",allEntries = true)
     public Result updateStatus(@PathVariable Integer status, Long id) {
         log.info("修改菜品状态：{}", status);
         log.info("修改菜品id：{}", id);
         dishService.updateStatus(status, id);
-        cleanCache("dish_*");
         return Result.success();
     }
 
@@ -77,8 +78,4 @@ public class DishController {
         return Result.success(dishVOList);
     }
 
-    private void cleanCache(String pattern){
-        Set keys = redisTemplate.keys(pattern);
-        redisTemplate.delete(keys);
-    }
 }
