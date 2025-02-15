@@ -66,8 +66,32 @@
     <select id="findByCategoryIdToProject" resultType="com.sky.vo.DishVO">
         select d.*, c.name as categoryName
         from dish d
-                 left outer join category c
-                                 on d.category_id = c.id
+        left outer join category c
+        on d.category_id = c.id
         where d.category_id = #{id}
+    </select>
+    <select id="findById" resultType="com.sky.entity.Dish">
+        SELECT * from dish where id = #{id}
+    </select>
+    <select id="findByCategoryIdWithFlavor" resultType="com.sky.vo.DishVO">
+        select d.*, c.name as categoryName
+        from dish d
+        left outer join category c
+        on d.category_id = c.id
+        where d.category_id = #{id}
+    </select>
+    <select id="findByCategoryIdToList" resultType="com.sky.vo.DishVO">
+        select d.*,c.name
+        from dish d
+        left join category c
+        on d.category_id = c.id
+        <where>
+            <if test="categoryId != null">
+                and d.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and d.status = #{status}
+            </if>
+        </where>
     </select>
 </mapper>

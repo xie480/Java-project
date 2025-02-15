@@ -69,4 +69,23 @@
                            on s.category_id = c.id
         where s.id = #{id}
     </select>
+    <select id="findByCategoryIdToList" resultType="com.sky.entity.Setmeal">
+        select * from setmeal
+        <where>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="findBySetmealId" resultType="com.sky.vo.DishItemVO">
+        select sd.name, sd.copies, d.image, d.description
+        from setmeal_dish sd left join dish d on sd.dish_id = d.id
+        where sd.setmeal_id = #{setmealId}
+    </select>
 </mapper>

@@ -7,7 +7,6 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ public interface DishMapper {
     @AutoFill(value = OperationType.INSERT)
     void saveDish(Dish dish);
 
-    @Select("SELECT * from dish where id = #{id}")
     Dish findById(Long i);
 
     List<Long> findByCategoryId(Long id);
@@ -31,4 +29,6 @@ public interface DishMapper {
     void updateDish(Dish dish);
 
     List<DishVO> findByCategoryIdToProject(Long categoryId);
+
+    List<DishVO> findByCategoryIdToList(Dish dish);
 }
