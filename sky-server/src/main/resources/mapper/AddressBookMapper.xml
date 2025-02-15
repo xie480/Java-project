@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.AddressBookMapper">
+    <insert id="saveAddressBook">
+        insert into address_book (id, user_id, consignee, sex, phone, province_code, province_name, city_code, city_name, district_code, district_name, detail, label, is_default)
+        values (#{id}, #{userId}, #{consignee}, #{sex}, #{phone}, #{provinceCode}, #{provinceName}, #{cityCode}, #{cityName}, #{districtCode}, #{districtName}, #{detail}, #{label}, #{isDefault})
+    </insert>
+    <update id="updateAddressBook" parameterType="addressBook">
+            update address_book
+            <set>
+                <if test="consignee != null">
+                    consignee = #{consignee},
+                </if>
+                <if test="sex != null">
+                    sex = #{sex},
+                </if>
+                <if test="phone != null">
+                    phone = #{phone},
+                </if>
+                <if test="detail != null">
+                    detail = #{detail},
+                </if>
+                <if test="label != null">
+                    label = #{label},
+                </if>
+                <if test="isDefault != null">
+                    is_default = #{isDefault},
+                </if>
+            </set>
+            where id = #{id}
+    </update>
+
+    <update id="updateAllAddressBookIsDefault">
+        update address_book set is_default = #{isDefault} where user_id = #{userId}
+    </update>
+    <delete id="deleteAddressBook">
+        delete from address_book where id = #{id}
+    </delete>
+
+    <select id="findByCondition" parameterType="AddressBook" resultType="AddressBook">
+        select * from address_book
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="phone != null">
+                and phone = #{phone}
+            </if>
+            <if test="isDefault != null">
+                and is_default = #{isDefault}
+            </if>
+        </where>
+    </select>
+    <select id="findById" resultType="com.sky.entity.AddressBook">
+        select * from address_book where id = #{id}
+    </select>
+</mapper>
