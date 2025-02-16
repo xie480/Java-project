@@ -13,4 +13,32 @@
                 #{payStatus}, #{amount}, #{remark}, #{phone}, #{address}, #{consignee},
                 #{estimatedDeliveryTime}, #{deliveryStatus}, #{packAmount}, #{tablewareNumber}, #{tablewareStatus})
     </insert>
+    <update id="update" parameterType="com.sky.entity.Orders">
+        update orders
+        <set>
+            <if test="number != null"> number=#{number}, </if>
+            <if test="status != null"> status=#{status}, </if>
+            <if test="addressBookId != null"> address_book_id=#{addressBookId}, </if>
+            <if test="orderTime != null"> order_time=#{orderTime},</if>
+            <if test="checkoutTime != null"> checkout_time=#{checkoutTime}, </if>
+            <if test="payMethod != null"> pay_method=#{payMethod}, </if>
+            <if test="payStatus != null"> pay_status=#{payStatus}, </if>
+            <if test="amount != null"> amount=#{amount}, </if>
+            <if test="remark != null"> remark=#{remark}, </if>
+            <if test="phone != null"> phone=#{phone}, </if>
+            <if test="address != null"> address=#{address}, </if>
+            <if test="userName != null"> user_name=#{userName}, </if>
+            <if test="consignee != null"> consignee=#{consignee} ,</if>
+            <if test="cancelReason != null"> cancel_reason=#{cancelReason}, </if>
+            <if test="rejectionReason != null"> rejection_reason=#{rejectionReason}, </if>
+            <if test="cancelTime != null"> cancel_time=#{cancelTime}, </if>
+            <if test="estimatedDeliveryTime != null"> estimated_delivery_time=#{estimatedDeliveryTime}, </if>
+            <if test="deliveryStatus != null"> delivery_status=#{deliveryStatus}, </if>
+            <if test="deliveryTime != null"> delivery_Time=#{deliveryTime}, </if>
+            <if test="packAmount != null"> pack_amount=#{packAmount},</if>
+            <if test="tablewareNumber != null"> tableware_number=#{tablewareNumber}, </if>
+            <if test="tablewareStatus != null"> tableware_status=#{tablewareStatus}, </if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>
