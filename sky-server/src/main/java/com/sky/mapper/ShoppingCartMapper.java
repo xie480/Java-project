@@ -17,4 +17,6 @@ public interface ShoppingCartMapper {
     void deleteAllByUserId(Long currentId);
 
     void deleteByDishIdOrSetmealId(ShoppingCart shoppingCart);
+
+    void saveShoppingCartWithList(List<ShoppingCart> shoppingCartList);
 }
