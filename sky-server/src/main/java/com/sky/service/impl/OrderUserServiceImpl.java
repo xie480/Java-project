@@ -17,6 +17,7 @@ import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderUserService;
+import com.sky.service.WebSocketServer;
 import com.sky.utils.HttpClientUtil;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
@@ -48,6 +49,8 @@ public class OrderUserServiceImpl implements OrderUserService {
     private UserMapper userMapper;
     @Autowired
     private WeChatPayUtil weChatPayUtil;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     private Orders orders;
 
@@ -137,6 +140,13 @@ public class OrderUserServiceImpl implements OrderUserService {
         Integer OrderStatus = Orders.TO_BE_CONFIRMED;  //订单状态，待接单
         LocalDateTime check_out_time = LocalDateTime.now();//更新支付时间
         orderMapper.updateStatus(OrderStatus, OrderPaidStatus, check_out_time, this.orders.getId());
+
+        Map map = new HashMap();
+        map.put("type", 1);//消息类型，1表示来单提醒
+        map.put("orderId", orders.getId());
+        map.put("content", "订单号：" + ordersPaymentDTO.getOrderNumber());
+
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
 
         return vo;
     }
@@ -238,6 +248,17 @@ public class OrderUserServiceImpl implements OrderUserService {
         }
         shoppingCartMapper.deleteAllByUserId(BaseContext.getCurrentId());
         shoppingCartMapper.saveShoppingCartWithList(shoppingCartList);
+    }
+
+    @Override
+    public void reminder(Long id) {
+        Orders orders = orderMapper.findById(id);
+        Map map = new HashMap();
+        map.put("type", 2);
+        map.put("orderId", id);
+        map.put("content", "订单号：" + orders.getNumber());
+
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
     }
 
     /**
