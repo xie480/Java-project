@@ -22,7 +22,7 @@ public class OrderTask {
     public void outOfTimeOrder(){
         log.info("取消超时订单");
         LocalDateTime outTime = LocalDateTime.now().plusMinutes(-15);
-        List<Orders> outOfTimeOrders = orderMapper.findOutOfTimeOrders(Orders.UN_PAID,outTime);
+        List<Orders> outOfTimeOrders = orderMapper.findOutOfTimeOrders(Orders.PENDING_PAYMENT,outTime);
         if(outOfTimeOrders != null && !outOfTimeOrders.isEmpty()){
             outOfTimeOrders.forEach(orders -> {
                 orders.setStatus(Orders.CANCELLED);
