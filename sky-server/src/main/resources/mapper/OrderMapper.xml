@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sky.mapper.OrderUserMapper">
+<mapper namespace="com.sky.mapper.OrderMapper">
 
 
     <insert id="saveOrder" parameterType="Orders" useGeneratedKeys="true" keyProperty="id">
@@ -41,7 +41,7 @@
         </set>
         where id=#{id}
     </update>
-    <select id="findHistoryOrders" resultType="com.sky.entity.Orders">
+    <select id="findByPage" resultType="com.sky.entity.Orders">
         select * from orders
         <where>
             <if test="number != null and number!=''">
@@ -67,5 +67,8 @@
     </select>
     <select id="findById" resultType="com.sky.entity.Orders">
         select * from orders where id = #{id}
+    </select>
+    <select id="statistics" resultType="integer">
+        select COUNT(*) from orders where status = #{status}
     </select>
 </mapper>
