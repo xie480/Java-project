@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SetMealMapper {
@@ -33,4 +34,6 @@ public interface SetMealMapper {
     List<Setmeal> findByCategoryIdToList(Setmeal setmeal);
 
     List<DishItemVO> findBySetmealId(Long id);
+
+    Integer countByMap(Map map);
 }

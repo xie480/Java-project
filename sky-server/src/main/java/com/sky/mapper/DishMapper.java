@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DishMapper {
@@ -31,4 +32,6 @@ public interface DishMapper {
     List<DishVO> findByCategoryIdToProject(Long categoryId);
 
     List<DishVO> findByCategoryIdToList(Dish dish);
+
+    Integer countByMap(Map map);
 }
