@@ -1,2 +1,2 @@
 # Java-project
-Java外卖项目源码，包含前端及后端
+Java外卖项目源码，放在master分支下
